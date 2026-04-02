@@ -1,6 +1,6 @@
 {
   "name": "copy-as-markdown",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fetch any URL and output clean Markdown to stdout. Turn web content into context for your AI agents, chatbots, and pipelines.",
   "main": "index.js",
   "bin": {
