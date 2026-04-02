@@ -1,84 +1,135 @@
-# Copy as Markdown
+<p align="center">
+  <img src="assets/hero.png" alt="Copy as Markdown — Turn any webpage into clean context for your AI" width="100%">
+</p>
 
-**The web is full of content your AI can't cleanly read. This fixes that.**
+<p align="center">
+  <strong>Turn any webpage into clean Markdown. One keystroke.</strong>
+</p>
 
-[![Install in Chrome](https://img.shields.io/badge/Chrome-Install%20Now-4285F4?logo=googlechrome&logoColor=white)](#install-the-extension)
-[![Install in Firefox](https://img.shields.io/badge/Firefox-Install%20Now-FF7139?logo=firefox&logoColor=white)](#install-the-extension)
-[![Install in Edge](https://img.shields.io/badge/Edge-Install%20Now-0078D7?logo=microsoftedge&logoColor=white)](#install-the-extension)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![No tracking](https://img.shields.io/badge/Telemetry-none-brightgreen.svg)](#)
-
----
-
-## Why This Exists
-
-When you paste raw web content into ChatGPT, Claude, or any AI agent, you're not just pasting text. You're pasting HTML noise — tags, attributes, scripts, navigation, footers, ads — all of it consuming tokens and costing money without adding any signal.
-
-Markdown is the format AI models actually understand. Clean structure, no noise, maximum signal per token.
-
-**Copy as Markdown converts any selected web content to clean Markdown in one keystroke.** Built for people who use AI daily and want to feed it better context at lower cost.
+<p align="center">
+  <a href="#install"><img src="https://img.shields.io/badge/Chrome-Supported-4285F4?logo=googlechrome&logoColor=white" alt="Chrome"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Edge-Supported-0078D7?logo=microsoftedge&logoColor=white" alt="Edge"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Brave-Supported-FB542B?logo=brave&logoColor=white" alt="Brave"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Firefox-Supported-FF7139?logo=firefox&logoColor=white" alt="Firefox"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"></a>
+  <a href="#privacy"><img src="https://img.shields.io/badge/Telemetry-None-brightgreen.svg" alt="No Telemetry"></a>
+</p>
 
 ---
 
-## What It Does
+## The Problem
 
-Select any content on any webpage. Right-click → **Copy as Markdown** or hit `Ctrl+Shift+M`.
+When you paste web content into ChatGPT, Claude, Copilot, or any AI tool, you're not pasting content. You're pasting **noise**:
 
-Clean, structured Markdown lands on your clipboard instantly. Paste it directly into ChatGPT, Claude, Copilot, your AI agent pipeline, or any tool that reads Markdown. No popups. No settings. No account. No internet connection required.
+```html
+<div class="article-body" data-tracker="abc123">
+  <nav class="breadcrumb">Home > Blog > AI</nav>
+  <div class="ad-banner" style="display:flex;padding:20px">
+    <script>trackPageView('article-123')</script>
+  </div>
+  <h2 style="font-size:24px;color:#333;margin-top:20px">Getting Started</h2>
+  <p class="content-text" id="p1">Your AI performs best when given
+  <strong>clean, structured context</strong>...</p>
+</div>
+```
 
-<!-- Add a demo GIF: record selecting text and hitting the shortcut, upload as assets/demo.gif -->
+That noise eats tokens, wastes money, and confuses your model. What your AI actually needs:
+
+```markdown
+## Getting Started
+
+Your AI performs best when given **clean, structured context**...
+```
+
+**Copy as Markdown strips the noise and gives your AI pure signal.**
 
 ---
 
-## Install the Extension
+## How It Works
 
-No app store required. Takes 30 seconds.
+**Select → Copy → Paste.** That's it.
+
+1. **Select** any content on any webpage (or copy the full page — no selection needed)
+2. Press `Cmd+Shift+M` (or right-click → **Copy as Markdown**)
+3. **Paste** directly into ChatGPT, Claude, Copilot, your terminal, your notes — anywhere
+
+No popups. No settings. No account. No internet connection. Works offline, instantly.
+
+---
+
+## Why Context Management Matters
+
+Every AI tool — whether it's a chatbot, a coding agent, or an automation pipeline — runs on **context**. The better the context you feed it, the better it performs.
+
+The problem is that context lives everywhere: web pages, documentation, articles, internal wikis, SharePoint, Confluence, Notion. When you need to move knowledge from one source to another — from a browser to your AI, from one copilot session to the next — the format matters.
+
+**Markdown is the universal format your AI understands.** It's what ChatGPT, Claude, Copilot, and every major AI tool reads natively. Clean structure, no noise, maximum signal per token.
+
+Copy as Markdown gives you that conversion in one keystroke — anywhere, on any page.
+
+**Use it to:**
+- Feed research and documentation into ChatGPT, Claude, or Copilot
+- Build AI agent pipelines that process web content cleanly
+- Populate RAG systems and vector databases with structured source material
+- Carry context between copilot sessions without losing formatting
+- Save context window space when working with long documents
+
+---
+
+## Install
+
+Takes 30 seconds. No app store required.
+
+<a id="install"></a>
 
 ### Chrome, Edge, or Brave
 
-1. [Download the repo as a ZIP](https://github.com/sulmatajb/copy-as-markdown/archive/refs/heads/main.zip) and unzip it — or clone it:
+1. [Download the ZIP](https://github.com/sulmatajb/copy-as-markdown/archive/refs/heads/main.zip) and unzip — or clone:
    ```bash
    git clone https://github.com/sulmatajb/copy-as-markdown.git
    ```
-2. Open `chrome://extensions` in your browser
+2. Open `chrome://extensions`
 3. Enable **Developer mode** (toggle, top-right)
-4. Click **Load unpacked**
-5. Select the `copy-as-markdown/` folder
+4. Click **Load unpacked** → select the `copy-as-markdown/` folder
 
 Done. The extension is live.
 
 ### Firefox
 
-1. Clone or download the repo (see above)
+1. Clone or download the repo
 2. Open `about:debugging#/runtime/this-firefox`
-3. Click **Load Temporary Add-on…**
-4. Select `manifest.json` from the `copy-as-markdown/` folder
+3. Click **Load Temporary Add-on…** → select `manifest.json`
 
-> Firefox temporary add-ons are removed on browser restart. For a permanent install the extension needs to be signed by Mozilla.
+> Firefox temporary add-ons are removed on restart. Permanent install requires Mozilla signing.
 
 ---
 
-## Two Ways to Use It
+## Usage
 
-### 1. Right-click menu
-Select text → right-click → choose your action:
-- **Copy as Markdown** — copies to clipboard instantly
-- **Save as Markdown file** — downloads a `.md` file named after the page title
-
-### 2. Keyboard shortcut
+### Keyboard shortcut
 
 | Platform | Shortcut |
 | --- | --- |
-| Windows / Linux | `Ctrl` + `Shift` + `M` |
 | macOS | `Cmd` + `Shift` + `M` |
+| Windows / Linux | `Ctrl` + `Shift` + `M` |
+
+When text is selected, copies the selection. When nothing is selected, copies the **full page** (with automatic noise removal — nav, footer, ads, sidebars are stripped).
 
 To remap: `chrome://extensions/shortcuts`
 
+### Right-click menu
+
+| Action | When |
+| --- | --- |
+| **Copy as Markdown** | Text selected |
+| **Copy Full Page as Markdown** | Any page |
+| **Save as Markdown file** | Any page — downloads a `.md` file |
+
 ---
 
-## Everything It Converts
+## What Gets Converted
 
-| HTML | Markdown |
+| HTML | → Markdown |
 | --- | --- |
 | `<h1>` – `<h6>` | `#` `##` `###` headings |
 | `<strong>`, `<b>` | `**bold**` |
@@ -94,18 +145,9 @@ To remap: `chrome://extensions/shortcuts`
 
 ---
 
-## Privacy First
-
-- **Zero network requests** — nothing leaves your machine
-- **No telemetry** — no analytics, no tracking, no logging
-- **No account** — no sign-in, no email, no onboarding
-- **Open source** — read every line of code yourself
-
----
-
 ## CLI — For AI Agents and Pipelines
 
-A companion Node.js CLI fetches any URL and outputs clean Markdown to stdout. Designed for piping into AI tools, scripts, and automation workflows.
+A companion CLI fetches any URL and outputs clean Markdown to stdout. Built for piping into AI tools, scripts, and automation.
 
 ```bash
 # No install required
@@ -137,39 +179,29 @@ npm install -g copy-as-markdown
 
 ---
 
-## Tech Stack
+<a id="privacy"></a>
 
-- **Manifest V3** — works in Chrome, Edge, Brave, and Firefox 109+
-- **Vanilla JavaScript** — no frameworks, no build step
-- **[Turndown.js](https://github.com/mixmark-io/turndown)** (MIT) — bundled locally, no CDN
-- **[@mozilla/readability](https://github.com/mozilla/readability)** — CLI article extraction
-- **Zero runtime dependencies** in the extension itself
+## Privacy
+
+- **Zero network requests** — nothing leaves your machine
+- **No telemetry** — no analytics, no tracking, no logging
+- **No account** — no sign-in, no email, no onboarding
+- **Open source** — read every line of code yourself
 
 ---
 
-## Project Structure
+## Tech Stack
 
-```
-copy-as-markdown/
-├── manifest.json        # Extension manifest (MV3)
-├── content.js           # Selection → Markdown → clipboard/download
-├── background.js        # Service worker: context menu + shortcut routing
-├── turndown.js          # Bundled Turndown.js (no CDN)
-├── icons/
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
-├── cli/
-│   ├── index.js         # Node.js CLI
-│   └── package.json
-└── README.md
-```
+- **Manifest V3** — Chrome, Edge, Brave, Firefox 109+
+- **Vanilla JavaScript** — no frameworks, no build step, no dependencies
+- **[Turndown.js](https://github.com/mixmark-io/turndown)** (MIT) — bundled locally, no CDN
+- **[@mozilla/readability](https://github.com/mozilla/readability)** — CLI article extraction
 
 ---
 
 ## Contributing
 
-Contributions are welcome. Open an issue before submitting a pull request for significant changes.
+Contributions welcome. Open an issue before submitting a PR for significant changes.
 
 1. Fork the repo
 2. Create a branch: `git checkout -b feature/your-change`
@@ -177,29 +209,10 @@ Contributions are welcome. Open an issue before submitting a pull request for si
 4. Push and open a pull request
 
 **Good first issues:**
-- Add a Turndown plugin for better `<figure>` / `<figcaption>` handling
+- Turndown plugin for `<figure>` / `<figcaption>` handling
 - Support `<details>` / `<summary>` conversion
 - Firefox permanent install packaging
-- Add unit tests for conversion rules
-
----
-
-## The Token Problem
-
-When you paste raw HTML into an AI model, you're wasting tokens on noise that adds zero value:
-
-- Navigation menus, headers, footers
-- Inline styles and class attributes
-- Script tags and tracking pixels
-- Duplicate whitespace and line breaks
-
-Markdown strips all of that. What's left is pure content — the signal your AI actually needs. Fewer tokens means lower API costs, faster responses, and better output quality because the model isn't distracted by junk.
-
-**This matters most for:**
-- Feeding research and documentation into ChatGPT, Claude, or Copilot
-- Building AI agent pipelines that process web content
-- Populating RAG systems and vector databases with clean source material
-- Saving context window space when working with long documents
+- Unit tests for conversion rules
 
 ---
 
@@ -210,5 +223,6 @@ MIT — use it, fork it, ship it.
 ---
 
 <p align="center">
-  Made for people who live in Markdown.
+  <strong>Your AI is only as good as the context you give it.</strong><br>
+  Give it Markdown.
 </p>

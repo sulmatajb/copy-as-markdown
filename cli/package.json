@@ -1,7 +1,7 @@
 {
   "name": "copy-as-markdown",
-  "version": "1.0.0",
-  "description": "Fetch any URL and output clean Markdown to stdout. Great for piping into AI agents.",
+  "version": "1.1.0",
+  "description": "Fetch any URL and output clean Markdown to stdout. Turn web content into context for your AI agents, chatbots, and pipelines.",
   "main": "index.js",
   "bin": {
     "copy-as-markdown": "./index.js"
@@ -15,10 +15,26 @@
     "cli",
     "readability",
     "turndown",
-    "ai-agent"
+    "ai-agent",
+    "ai-context",
+    "web-scraping",
+    "llm",
+    "chatgpt",
+    "claude",
+    "copilot",
+    "rag",
+    "web-to-markdown"
   ],
-  "author": "",
+  "author": "Besnik Sulmataj",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sulmatajb/copy-as-markdown.git"
+  },
+  "homepage": "https://github.com/sulmatajb/copy-as-markdown",
+  "bugs": {
+    "url": "https://github.com/sulmatajb/copy-as-markdown/issues"
+  },
   "dependencies": {
     "@mozilla/readability": "^0.5.0",
     "jsdom": "^24.0.0",

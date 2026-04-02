@@ -6,7 +6,7 @@
  *  - Message listener from background.js (context-menu click)
  *  - HTML → Markdown conversion via bundled Turndown.js
  *  - Clipboard write via Async Clipboard API (execCommand fallback)
- *  - Brief toast notification
+ *  - Brief toast notification with slide-in animation
  *
  * Loaded after turndown.js via manifest content_scripts.
  */
@@ -16,7 +16,7 @@
 
   // ─── Turndown instance ───────────────────────────────────────────────────
 
-  const td = new TurndownService({
+  var td = new TurndownService({
     headingStyle: 'atx',        // # ## ###  (not setext underlines)
     hr: '---',
     bulletListMarker: '-',
@@ -150,6 +150,45 @@
   }
 
   /**
+   * Gets the full page body HTML, cleaning out nav/footer/sidebar noise.
+   * @returns {string}
+   */
+  function getFullPageHTML() {
+    // Clone body to avoid mutating the live DOM
+    var clone = document.body.cloneNode(true);
+
+    // Remove common non-content elements
+    var noiseTags = ['nav', 'footer', 'header', 'aside', 'script', 'style',
+                     'noscript', 'iframe', 'svg', 'form'];
+    noiseTags.forEach(function (tag) {
+      var els = clone.querySelectorAll(tag);
+      for (var i = 0; i < els.length; i++) {
+        els[i].remove();
+      }
+    });
+
+    // Remove elements with common noise class/id patterns
+    var noiseSelectors = [
+      '[role="navigation"]', '[role="banner"]', '[role="contentinfo"]',
+      '[class*="sidebar"]', '[class*="nav-"]', '[class*="footer"]',
+      '[class*="header"]', '[class*="menu"]', '[class*="cookie"]',
+      '[class*="popup"]', '[class*="modal"]', '[class*="ad-"]',
+      '[class*="advertisement"]', '[id*="sidebar"]', '[id*="footer"]',
+      '[id*="header"]', '[id*="nav"]', '[id*="cookie"]', '[id*="ad-"]'
+    ];
+    noiseSelectors.forEach(function (sel) {
+      try {
+        var els = clone.querySelectorAll(sel);
+        for (var i = 0; i < els.length; i++) {
+          els[i].remove();
+        }
+      } catch (_e) { /* invalid selector on some pages, skip */ }
+    });
+
+    return clone.innerHTML;
+  }
+
+  /**
    * Writes text to the clipboard.
    * Prefers the Async Clipboard API; falls back to execCommand for
    * environments where the async API is unavailable or blocked.
@@ -171,41 +210,60 @@
     }
   }
 
+  // ─── Toast notification ─────────────────────────────────────────────────
+
+  // Inject toast styles once
+  var styleEl = document.createElement('style');
+  styleEl.textContent = [
+    '@keyframes __cam_slide_in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }',
+    '@keyframes __cam_fade_out { from { opacity: 1; } to { opacity: 0; transform: translateY(8px); } }',
+    '#__cam_toast__ {',
+    '  position: fixed;',
+    '  bottom: 24px;',
+    '  right: 24px;',
+    '  z-index: 2147483647;',
+    '  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);',
+    '  color: #ffffff;',
+    '  font: 500 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;',
+    '  padding: 12px 18px;',
+    '  border-radius: 10px;',
+    '  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(88, 166, 255, 0.15);',
+    '  pointer-events: none;',
+    '  animation: __cam_slide_in 0.3s cubic-bezier(0.16, 1, 0.3, 1);',
+    '  letter-spacing: 0.01em;',
+    '  display: flex;',
+    '  align-items: center;',
+    '  gap: 8px;',
+    '}',
+    '#__cam_toast__.--success { border-left: 3px solid #58a6ff; }',
+    '#__cam_toast__.--warning { border-left: 3px solid #d29922; }',
+    '#__cam_toast__.--save    { border-left: 3px solid #56d364; }',
+    '#__cam_toast__.--fadeout { animation: __cam_fade_out 0.3s ease forwards; }'
+  ].join('\n');
+  document.documentElement.appendChild(styleEl);
+
   /**
    * Shows a brief, non-intrusive toast at the bottom-right of the viewport.
-   * Fades out and self-destructs after ~2 seconds.
+   * Slides in and fades out after ~2.5 seconds.
    * @param {string} message
+   * @param {'success'|'warning'|'save'} [type='success']
    */
-  function showToast(message) {
+  function showToast(message, type) {
+    type = type || 'success';
     var existing = document.getElementById('__cam_toast__');
     if (existing) existing.remove();
 
     var toast = document.createElement('div');
     toast.id = '__cam_toast__';
+    toast.className = '--' + type;
     toast.textContent = message;
-    toast.style.cssText = [
-      'position:fixed',
-      'bottom:24px',
-      'right:24px',
-      'z-index:2147483647',
-      'background:#1a1a1a',
-      'color:#ffffff',
-      'font:500 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
-      'padding:10px 16px',
-      'border-radius:6px',
-      'box-shadow:0 4px 20px rgba(0,0,0,.4)',
-      'pointer-events:none',
-      'transition:opacity .25s ease',
-      'opacity:1',
-      'letter-spacing:.01em'
-    ].join(';');
 
     document.documentElement.appendChild(toast);
 
     setTimeout(function () {
-      toast.style.opacity = '0';
-      setTimeout(function () { if (toast.parentNode) toast.remove(); }, 260);
-    }, 1800);
+      toast.classList.add('--fadeout');
+      setTimeout(function () { if (toast.parentNode) toast.remove(); }, 320);
+    }, 2500);
   }
 
   // ─── Main actions ─────────────────────────────────────────────────────────
@@ -213,39 +271,64 @@
   /**
    * Shared helper: get selection HTML → convert → return markdown string.
    * Shows a toast and returns null if nothing is selected or convertible.
-   * @returns {string|null}
+   * @param {boolean} [allowFullPage=false]  If true, falls back to full page when nothing selected.
+   * @returns {{ markdown: string, isFullPage: boolean } | null}
    */
-  function getSelectionMarkdown() {
+  function getMarkdown(allowFullPage) {
     var html = getSelectionHTML();
+    var isFullPage = false;
+
     if (!html || !html.trim()) {
-      showToast('\u26A0 Select some text first');
-      return null;
+      if (allowFullPage) {
+        html = getFullPageHTML();
+        isFullPage = true;
+      } else {
+        showToast('\u26A0 Select some text first', 'warning');
+        return null;
+      }
     }
+
     var markdown = htmlToMarkdown(html);
     if (!markdown.trim()) {
-      showToast('\u26A0 Nothing to convert');
+      showToast('\u26A0 Nothing to convert', 'warning');
       return null;
     }
-    return markdown;
+    return { markdown: markdown, isFullPage: isFullPage };
   }
 
   /**
-   * Copies the selected content as Markdown to the clipboard.
+   * Copies the selected content (or full page) as Markdown to the clipboard.
+   * @param {boolean} [fullPage=false]  Force full page copy.
    */
-  async function copySelectionAsMarkdown() {
-    var markdown = getSelectionMarkdown();
-    if (!markdown) return;
-    await copyToClipboard(markdown);
-    showToast('\u2713 Copied as Markdown');
+  async function copyAsMarkdown(fullPage) {
+    var result;
+    if (fullPage) {
+      // Explicitly full page — skip selection check
+      var html = getFullPageHTML();
+      var markdown = htmlToMarkdown(html);
+      if (!markdown.trim()) {
+        showToast('\u26A0 Nothing to convert', 'warning');
+        return;
+      }
+      result = { markdown: markdown, isFullPage: true };
+    } else {
+      result = getMarkdown(true); // allow fallback to full page
+    }
+    if (!result) return;
+
+    await copyToClipboard(result.markdown);
+    var label = result.isFullPage ? '\u2713 Full page copied as Markdown' : '\u2713 Copied as Markdown';
+    showToast(label, 'success');
   }
 
   /**
    * Downloads the selected content as a .md file.
    * The filename is derived from the page title, sanitised for the filesystem.
+   * Sends to background script for proper download via chrome.downloads API.
    */
-  function saveSelectionAsMarkdown() {
-    var markdown = getSelectionMarkdown();
-    if (!markdown) return;
+  function saveAsMarkdown() {
+    var result = getMarkdown(true); // allow full page fallback
+    if (!result) return;
 
     // Build a safe filename from the page title
     var raw = (document.title || 'selection').trim();
@@ -256,22 +339,15 @@
       .slice(0, 60) || 'selection';   // max 60 chars
     filename += '.md';
 
-    // Create a Blob and trigger a download via a temporary <a> element
-    var blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
-    var url  = URL.createObjectURL(blob);
-    var a    = document.createElement('a');
-    a.href     = url;
-    a.download = filename;
-    a.style.cssText = 'display:none';
-    document.body.appendChild(a);
-    a.click();
-    // Clean up after the browser has had time to start the download
-    setTimeout(function () {
-      URL.revokeObjectURL(url);
-      if (a.parentNode) a.remove();
-    }, 1000);
+    // Send to background script for download (avoids Blob URL filename issues)
+    chrome.runtime.sendMessage({
+      action: 'downloadMarkdown',
+      markdown: result.markdown,
+      filename: filename
+    });
 
-    showToast('\u2193 Saved as ' + filename);
+    var label = result.isFullPage ? '\u2193 Full page saved as ' + filename : '\u2193 Saved as ' + filename;
+    showToast(label, 'save');
   }
 
   // ─── Keyboard shortcut listener ──────────────────────────────────────────
@@ -289,7 +365,7 @@
     if (modifierHeld && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
       e.preventDefault();
       e.stopPropagation();
-      copySelectionAsMarkdown();
+      copyAsMarkdown(false);
     }
   }, /* capture */ true);
 
@@ -299,7 +375,7 @@
     if (!message) return;
 
     if (message.action === 'copyAsMarkdown') {
-      copySelectionAsMarkdown().then(function () {
+      copyAsMarkdown(false).then(function () {
         sendResponse({ ok: true });
       }).catch(function (err) {
         sendResponse({ ok: false, error: err && err.message });
@@ -307,8 +383,17 @@
       return true; // keep channel open for async response
     }
 
+    if (message.action === 'copyFullPageAsMarkdown') {
+      copyAsMarkdown(true).then(function () {
+        sendResponse({ ok: true });
+      }).catch(function (err) {
+        sendResponse({ ok: false, error: err && err.message });
+      });
+      return true;
+    }
+
     if (message.action === 'saveAsMarkdown') {
-      saveSelectionAsMarkdown();
+      saveAsMarkdown();
       sendResponse({ ok: true });
     }
   });

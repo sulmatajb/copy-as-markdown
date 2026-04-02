@@ -1,10 +1,7 @@
-# Node
+node_modules/
+.DS_Store
+*.log
 cli/node_modules/
 cli/package-lock.json
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Build artifacts
-*.zip
+assets/hero-card.html
+assets/icon-source.png

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Copy as Markdown",
-  "version": "1.0.0",
-  "description": "Convert any web content to clean Markdown in one click. Feed your AI agents and chatbots better context, use fewer tokens, and cut API costs.",
+  "version": "1.1.0",
+  "description": "Turn any webpage into clean Markdown in one keystroke. Feed better context to your AI agents, use fewer tokens, and manage knowledge across tools.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -12,7 +12,8 @@
     "clipboardWrite",
     "contextMenus",
     "activeTab",
-    "scripting"
+    "scripting",
+    "downloads"
   ],
   "host_permissions": [
     "<all_urls>"

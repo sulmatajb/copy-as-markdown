@@ -7,13 +7,14 @@
 
 'use strict';
 
-const MENU_COPY = 'copy-as-markdown';
-const MENU_SAVE = 'save-as-markdown';
+const MENU_COPY      = 'copy-as-markdown';
+const MENU_COPY_PAGE = 'copy-full-page-as-markdown';
+const MENU_SAVE      = 'save-as-markdown';
 
 // ─── Context menu ─────────────────────────────────────────────────────────
 
 function createContextMenu() {
-  // Remove both items cleanly before recreating
+  // Remove all items cleanly before recreating
   chrome.contextMenus.removeAll(function () {
     void chrome.runtime.lastError;
 
@@ -24,9 +25,15 @@ function createContextMenu() {
     });
 
     chrome.contextMenus.create({
+      id: MENU_COPY_PAGE,
+      title: 'Copy Full Page as Markdown',
+      contexts: ['page', 'selection']
+    });
+
+    chrome.contextMenus.create({
       id: MENU_SAVE,
       title: 'Save as Markdown file',
-      contexts: ['selection']
+      contexts: ['page', 'selection']
     });
   });
 }
@@ -41,6 +48,8 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
 
   if (info.menuItemId === MENU_COPY) {
     sendToContentScript(tab.id, 'copyAsMarkdown');
+  } else if (info.menuItemId === MENU_COPY_PAGE) {
+    sendToContentScript(tab.id, 'copyFullPageAsMarkdown');
   } else if (info.menuItemId === MENU_SAVE) {
     sendToContentScript(tab.id, 'saveAsMarkdown');
   }
@@ -59,13 +68,28 @@ chrome.commands.onCommand.addListener(function (command) {
   });
 });
 
+// ─── Download handler (content script → background) ──────────────────────
+
+chrome.runtime.onMessage.addListener(function (message, _sender, _sendResponse) {
+  if (!message || message.action !== 'downloadMarkdown') return;
+
+  // Use a data: URL so Chrome actually starts the download,
+  // and saveAs: true so the user gets a native Save dialog with the proper filename.
+  const dataUrl = 'data:text/markdown;charset=utf-8,' + encodeURIComponent(message.markdown);
+  chrome.downloads.download({
+    url: dataUrl,
+    filename: message.filename,
+    saveAs: true
+  });
+});
+
 // ─── Helper ──────────────────────────────────────────────────────────────
 
 /**
  * Sends an action to the content script in the given tab.
  * If the content script isn't loaded yet, injects it first then retries.
  * @param {number} tabId
- * @param {string} action  'copyAsMarkdown' | 'saveAsMarkdown'
+ * @param {string} action  'copyAsMarkdown' | 'copyFullPageAsMarkdown' | 'saveAsMarkdown'
  */
 function sendToContentScript(tabId, action) {
   chrome.tabs.sendMessage(
