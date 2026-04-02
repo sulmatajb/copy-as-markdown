@@ -68,8 +68,15 @@ td.addRule('strikethrough', {
 
 // Remove non-content elements
 td.remove(['script', 'style', 'noscript', 'nav', 'footer', 'aside', 'head',
-           'form', 'button', 'input', 'select', 'textarea', 'iframe',
-           'figure > figcaption:empty']);
+           'form', 'button', 'input', 'select', 'textarea', 'iframe']);
+
+// Remove empty figcaptions (td.remove() only accepts tag names, not CSS selectors)
+td.addRule('emptyFigcaption', {
+  filter: function (node) {
+    return node.nodeName === 'FIGCAPTION' && !node.textContent.trim();
+  },
+  replacement: function () { return ''; }
+});
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
@@ -86,15 +93,20 @@ async function run() {
   // Fetch
   let html;
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
     const response = await fetch(parsedUrl.href, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; copy-as-markdown/1.0; +https://github.com/copy-as-markdown/copy-as-markdown)',
+        'User-Agent': 'Mozilla/5.0 (compatible; copy-as-markdown/1.0; +https://github.com/sulmatajb/copy-as-markdown)',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5'
       },
       redirect: 'follow',
-      timeout: 15000
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -102,7 +114,11 @@ async function run() {
 
     html = await response.text();
   } catch (err) {
-    console.error(`Error fetching URL: ${err.message}`);
+    if (err.name === 'AbortError') {
+      console.error('Error: Request timed out after 15 seconds.');
+    } else {
+      console.error(`Error fetching URL: ${err.message}`);
+    }
     process.exit(1);
   }
 

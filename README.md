@@ -28,7 +28,7 @@ Select any content on any webpage. Right-click → **Copy as Markdown** or hit `
 
 The selected HTML is instantly converted to clean, properly formatted Markdown and placed on your clipboard. No popups. No settings screen. No account. No internet connection required. **It just works.**
 
-![Demo GIF](https://raw.githubusercontent.com/copy-as-markdown/copy-as-markdown/main/assets/demo.gif)
+<!-- Add a demo GIF here: record a short clip selecting text and using the shortcut, then upload to the repo as assets/demo.gif -->
 
 ---
 
@@ -80,7 +80,7 @@ Select text → right-click → choose your action:
 ### Chrome, Edge, or Brave
 
 ```bash
-git clone https://github.com/copy-as-markdown/copy-as-markdown.git
+git clone https://github.com/sulmatajb/copy-as-markdown.git
 ```
 
 1. Open `chrome://extensions`
