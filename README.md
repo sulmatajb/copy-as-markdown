@@ -2,10 +2,10 @@
 
 **Select anything on any webpage. Right-click. Get clean Markdown. Done.**
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-coming%20soon-lightgrey?logo=googlechrome&logoColor=white)](https://chrome.google.com/webstore)
-[![Firefox Add-ons](https://img.shields.io/badge/Firefox-coming%20soon-lightgrey?logo=firefox&logoColor=white)](https://addons.mozilla.org)
+[![Install in Chrome](https://img.shields.io/badge/Chrome-Install%20Now-4285F4?logo=googlechrome&logoColor=white)](#install-the-extension)
+[![Install in Firefox](https://img.shields.io/badge/Firefox-Install%20Now-FF7139?logo=firefox&logoColor=white)](#install-the-extension)
+[![Install in Edge](https://img.shields.io/badge/Edge-Install%20Now-0078D7?logo=microsoftedge&logoColor=white)](#install-the-extension)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Manifest V3](https://img.shields.io/badge/Manifest-V3-green.svg)](#)
 [![No tracking](https://img.shields.io/badge/Telemetry-none-brightgreen.svg)](#)
 
 ---
@@ -28,7 +28,53 @@ Select any content on any webpage. Right-click → **Copy as Markdown** or hit `
 
 The selected HTML is instantly converted to clean, properly formatted Markdown and placed on your clipboard. No popups. No settings screen. No account. No internet connection required. **It just works.**
 
-<!-- Add a demo GIF here: record a short clip selecting text and using the shortcut, then upload to the repo as assets/demo.gif -->
+<!-- Add a demo GIF: record selecting text and hitting the shortcut, upload as assets/demo.gif -->
+
+---
+
+## Install the Extension
+
+No app store required. Takes 30 seconds.
+
+### Chrome, Edge, or Brave
+
+1. [Download the repo as a ZIP](https://github.com/sulmatajb/copy-as-markdown/archive/refs/heads/main.zip) and unzip it — or clone it:
+   ```bash
+   git clone https://github.com/sulmatajb/copy-as-markdown.git
+   ```
+2. Open `chrome://extensions` in your browser
+3. Enable **Developer mode** (toggle, top-right)
+4. Click **Load unpacked**
+5. Select the `copy-as-markdown/` folder
+
+Done. The extension is live.
+
+### Firefox
+
+1. Clone or download the repo (see above)
+2. Open `about:debugging#/runtime/this-firefox`
+3. Click **Load Temporary Add-on…**
+4. Select `manifest.json` from the `copy-as-markdown/` folder
+
+> Firefox temporary add-ons are removed on browser restart. For a permanent install the extension needs to be signed by Mozilla.
+
+---
+
+## Two Ways to Use It
+
+### 1. Right-click menu
+Select text → right-click → choose your action:
+- **Copy as Markdown** — copies to clipboard instantly
+- **Save as Markdown file** — downloads a `.md` file named after the page title
+
+### 2. Keyboard shortcut
+
+| Platform | Shortcut |
+| --- | --- |
+| Windows / Linux | `Ctrl` + `Shift` + `M` |
+| macOS | `Cmd` + `Shift` + `M` |
+
+To remap: `chrome://extensions/shortcuts`
 
 ---
 
@@ -50,51 +96,12 @@ The selected HTML is instantly converted to clean, properly formatted Markdown a
 
 ---
 
-## Two Ways to Use It
-
-### 1. Right-click menu
-Select text → right-click → choose your action:
-- **Copy as Markdown** — copies to clipboard instantly
-- **Save as Markdown file** — downloads a `.md` file named after the page title
-
-### 2. Keyboard shortcut
-
-| Platform | Shortcut |
-| --- | --- |
-| Windows / Linux | `Ctrl` + `Shift` + `M` |
-| macOS | `Cmd` + `Shift` + `M` |
-
----
-
 ## Privacy First
 
 - **Zero network requests** — nothing leaves your machine
 - **No telemetry** — no analytics, no tracking, no logging
 - **No account** — no sign-in, no email, no onboarding
 - **Open source** — read every line of code yourself
-
----
-
-## Install from Source
-
-### Chrome, Edge, or Brave
-
-```bash
-git clone https://github.com/sulmatajb/copy-as-markdown.git
-```
-
-1. Open `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked**
-4. Select the `copy-as-markdown/` folder
-
-### Firefox
-
-1. Open `about:debugging#/runtime/this-firefox`
-2. Click **Load Temporary Add-on…**
-3. Select `manifest.json` from the `copy-as-markdown/` folder
-
-> Firefox temporary add-ons are removed on browser restart. For a permanent install, the extension needs to be signed by Mozilla.
 
 ---
 
@@ -159,12 +166,6 @@ copy-as-markdown/
 │   └── package.json
 └── README.md
 ```
-
----
-
-## Customize the Shortcut
-
-In Chrome: go to `chrome://extensions/shortcuts` and remap to anything you prefer.
 
 ---
 
