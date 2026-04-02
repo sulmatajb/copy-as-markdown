@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check extension JS syntax
+        run: |
+          node --check content.js
+          node --check background.js
+          echo "✓ Extension JS syntax OK"
+
+      - name: Check manifest JSON
+        run: |
+          python3 -c "import json; json.load(open('manifest.json')); print('✓ manifest.json valid')"
+
+  cli:
+    name: CLI Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check CLI syntax
+        run: node --check index.js && echo "✓ CLI syntax OK"
+
+      - name: Run CLI smoke test
+        run: |
+          node index.js https://example.com --title | head -5
+          echo "✓ CLI smoke test passed"

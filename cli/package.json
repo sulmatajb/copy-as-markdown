@@ -1,0 +1,32 @@
+{
+  "name": "copy-as-markdown",
+  "version": "1.0.0",
+  "description": "Fetch any URL and output clean Markdown to stdout. Great for piping into AI agents.",
+  "main": "index.js",
+  "bin": {
+    "copy-as-markdown": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "markdown",
+    "html-to-markdown",
+    "cli",
+    "readability",
+    "turndown",
+    "ai-agent"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "jsdom": "^24.0.0",
+    "node-fetch": "^3.3.2",
+    "turndown": "^7.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module"
+}

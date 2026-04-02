@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Copy as Markdown",
+  "version": "1.0.0",
+  "description": "Select anything on any webpage. Copy it as clean Markdown.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "clipboardWrite",
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["turndown.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "copy-as-markdown": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M",
+        "mac": "Command+Shift+M"
+      },
+      "description": "Copy selected content as Markdown"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "copy-as-markdown@extension",
+      "strict_min_version": "109.0"
+    }
+  }
+}
