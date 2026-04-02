@@ -1,6 +1,6 @@
 # Copy as Markdown
 
-**Select anything on any webpage. Right-click. Get clean Markdown. Done.**
+**The web is full of content your AI can't cleanly read. This fixes that.**
 
 [![Install in Chrome](https://img.shields.io/badge/Chrome-Install%20Now-4285F4?logo=googlechrome&logoColor=white)](#install-the-extension)
 [![Install in Firefox](https://img.shields.io/badge/Firefox-Install%20Now-FF7139?logo=firefox&logoColor=white)](#install-the-extension)
@@ -10,15 +10,13 @@
 
 ---
 
-## The Problem
+## Why This Exists
 
-You find a great article. A table you need. A code snippet. Documentation. You copy it and paste it into Notion, Obsidian, ChatGPT, your notes app — and it looks like garbage.
+When you paste raw web content into ChatGPT, Claude, or any AI agent, you're not just pasting text. You're pasting HTML noise — tags, attributes, scripts, navigation, footers, ads — all of it consuming tokens and costing money without adding any signal.
 
-Broken formatting. Raw HTML. Walls of unstyled text.
+Markdown is the format AI models actually understand. Clean structure, no noise, maximum signal per token.
 
-You spend 3 minutes manually fixing what should have taken 3 seconds.
-
-**Copy as Markdown fixes this.**
+**Copy as Markdown converts any selected web content to clean Markdown in one keystroke.** Built for people who use AI daily and want to feed it better context at lower cost.
 
 ---
 
@@ -26,7 +24,7 @@ You spend 3 minutes manually fixing what should have taken 3 seconds.
 
 Select any content on any webpage. Right-click → **Copy as Markdown** or hit `Ctrl+Shift+M`.
 
-The selected HTML is instantly converted to clean, properly formatted Markdown and placed on your clipboard. No popups. No settings screen. No account. No internet connection required. **It just works.**
+Clean, structured Markdown lands on your clipboard instantly. Paste it directly into ChatGPT, Claude, Copilot, your AI agent pipeline, or any tool that reads Markdown. No popups. No settings. No account. No internet connection required.
 
 <!-- Add a demo GIF: record selecting text and hitting the shortcut, upload as assets/demo.gif -->
 
@@ -186,9 +184,22 @@ Contributions are welcome. Open an issue before submitting a pull request for si
 
 ---
 
-## Why This Exists
+## The Token Problem
 
-AI workflows, note-taking, and writing in Markdown are now mainstream. But the web still serves HTML. Every researcher, developer, writer, and analyst who uses tools like Obsidian, Notion, Logseq, ChatGPT, or VS Code hits this friction dozens of times a day. This extension removes it entirely — no friction, no dependencies, no cloud, no cost.
+When you paste raw HTML into an AI model, you're wasting tokens on noise that adds zero value:
+
+- Navigation menus, headers, footers
+- Inline styles and class attributes
+- Script tags and tracking pixels
+- Duplicate whitespace and line breaks
+
+Markdown strips all of that. What's left is pure content — the signal your AI actually needs. Fewer tokens means lower API costs, faster responses, and better output quality because the model isn't distracted by junk.
+
+**This matters most for:**
+- Feeding research and documentation into ChatGPT, Claude, or Copilot
+- Building AI agent pipelines that process web content
+- Populating RAG systems and vector databases with clean source material
+- Saving context window space when working with long documents
 
 ---
 

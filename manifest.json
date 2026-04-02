@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Copy as Markdown",
   "version": "1.0.0",
-  "description": "Select anything on any webpage. Copy it as clean Markdown.",
+  "description": "Convert any web content to clean Markdown in one click. Feed your AI agents and chatbots better context, use fewer tokens, and cut API costs.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
