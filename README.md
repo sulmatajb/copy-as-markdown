@@ -201,7 +201,7 @@ npm install -g copy-as-markdown
 
 ## Contributing
 
-Contributions welcome. Open an issue before submitting a PR for significant changes.
+Contributions welcome. 
 
 1. Fork the repo
 2. Create a branch: `git checkout -b feature/your-change`
